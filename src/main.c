@@ -216,12 +216,29 @@ int main(int argc, char *argv[])
         points = generate_points(k, n);
     }
 
+    group_t *groups = cluster(k, n, points);
+    free(points);
+
     FILE *ofile = fopen(ofilename, "w+");
-    for (size_t i = 0; i < n; ++i)
+    for (size_t i = 0; i < k; ++i)
     {
-        fprintf(ofile, "%lf %lf\n", creal(points[i]), cimag(points[i]));
+        for (size_t j = 1; j < groups[i].size; ++j)
+            fprintf(ofile, "%lf %lf %zu\n", creal(groups[i].points[j]), cimag(groups[i].points[j]), i);
     }
-    k_means(k, n, points);
+
+    for (size_t i = 0; i < k; ++i)
+        free(groups[i].points);
+
+    free(groups);
+
+    fclose(ofile);
+
+    system("gnuplot -p -e \"set title 'K-means Clustering'; "
+           "set xlabel 'X'; set ylabel 'Y'; "
+           "set key off; "
+           "set palette model RGB defined (0 'red', 1 'blue', 2 'green', 3 'orange', 4 'purple'); "
+           "set style fill solid 1.0; "
+           "plot 'k-clusters' using 1:2:3 with points pt 7 ps 1.5 lc palette notitle \"");
 
     return 0;
 }

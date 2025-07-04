@@ -12,7 +12,10 @@ typedef struct group
   point_t *points;
 } group_t;
 
-group_t *k_means(size_t k, size_t n, point_t *points);
+group_t *init_group(size_t k);
+void group_add(group_t *group, point_t point);
+
+group_t *cluster(size_t k, size_t n, point_t *points);
 
 #endif
 
