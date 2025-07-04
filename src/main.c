@@ -9,7 +9,8 @@
 #include "include/point.h"
 #include "include/k-means.h"
 
-#define SPREAD 5.0
+#define RANGE 10
+#define SPREAD 10.0
 
 
 typedef struct
@@ -62,7 +63,7 @@ point_t *generate_points(size_t k, size_t n)
     size_t t = 0;
     point_t *points = NULL;
     for (size_t i = 0; i < k; ++i) {
-        double x = rand_double(-50., 50), y = rand_double(-50., 50.);
+        double x = rand_double(-RANGE, RANGE), y = rand_double(-RANGE, RANGE);
         for (size_t j = 0; t < n && j < (size_t)ceil((double)n / k); ++j, ++t)
         {
             double dx = rand_double(-SPREAD, SPREAD), dy = rand_double(-SPREAD, SPREAD);
@@ -204,7 +205,6 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    printf("%ld %ld\n", k, n);
     point_t *points;
     if (ifilename)
     {
