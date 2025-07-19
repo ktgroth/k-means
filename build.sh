@@ -23,6 +23,8 @@ OUTPUT=$BUILD/k-means
 function build {
     mkdir -p $OBJ
     mkdir -p $BUILD
+    mkdir -p clusterings
+    mkdir -p scripts
 
     for i in "${!SRCS[@]}"; do
         src="${SRCS[$i]}"
@@ -42,7 +44,8 @@ function run {
 }
 
 function test {
-    ./$OUTPUT test
+    ./$OUTPUT -n 500 -k 5 -d 3
+    gnuplot
 }
 
 function comp {
@@ -54,7 +57,8 @@ function clean {
 
     rm -rf $OBJ
     rm -rf $BUILD
-    rm -rf stats
+    rm -rf clusterings
+    rm -rf scripts
 }
 
 for arg in "$@"; do
